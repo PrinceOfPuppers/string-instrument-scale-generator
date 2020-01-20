@@ -68,7 +68,9 @@ class App:
                 break
             else:
                 spacingIndex=(interval-1+scaleNum)%len(self.spacing)
+                
                 checkingNum+=self.spacing[spacingIndex]
+                checkingNum%=6
 
 
         #if no match is found interval is set to self.nonIntervalNum

@@ -16,12 +16,11 @@ def makeGraphText(app,root,scale):
     intervalArrayTitle="{} {} ({}) with Tuning {} ".format(rootText,scaleNameText,scaleNoteText,tuningText)
     
     stringLabels=[tone.capitalize() for tone in app.tuning]
-    fretLabels=[i for i in range(0,app.numFrets)]
+    fretLabels=["open"]+[i for i in range(1,app.numFrets)]
 
     return(intervalArrayTitle,stringLabels,fretLabels)
 
 def showIntervalArray(intervalArray,title,stringLabels,fretLabels):
-
     fig, ax = plt.subplots()
     ax.imshow(intervalArray,cmap='viridis_r')
 
@@ -47,8 +46,8 @@ def showIntervalArray(intervalArray,title,stringLabels,fretLabels):
 if __name__ == "__main__":
     cfg=Config()
     app=App(cfg)
-    root="c"
-    scale="aeolian"
+    root="b"
+    scale="locrian"
 
     intervalArray=app.makeIntervalArray(scale,root)
     title,stringLabels,fretLabels=makeGraphText(app,root,scale)
