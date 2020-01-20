@@ -101,5 +101,3 @@ class App:
                 intervalArray[stringNum][fretNum]=self.intervalGivenNum(scale,rootLetter,noteNum)
         
         return(intervalArray)
-
-

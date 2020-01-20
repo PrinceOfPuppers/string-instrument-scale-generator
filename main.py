@@ -3,7 +3,25 @@ from config import Config
 import matplotlib.pyplot as plt
 import numpy as np
 
-def showIntervalArray(intervalArray,stringLabels,fretLabels):
+def makeGraphText(app,root,scale):
+    note= lambda interval : app.noteGivenInterval(scale,root,interval)
+    scaleNotes=[note(interval) for interval in range(1,8)]
+
+    #capitalizes text and converts lists of notes to strings
+    rootText=root.capitalize()
+    scaleNameText=scale.capitalize()
+    scaleNoteText=" ".join(tone.capitalize() for tone in scaleNotes)
+    tuningText=" ".join(tone.capitalize() for tone in app.tuning)
+
+    intervalArrayTitle="{} {} ({}) with Tuning {} ".format(rootText,scaleNameText,scaleNoteText,tuningText)
+    
+    stringLabels=[tone.capitalize() for tone in app.tuning]
+    fretLabels=[i for i in range(0,app.numFrets)]
+
+    return(intervalArrayTitle,stringLabels,fretLabels)
+
+def showIntervalArray(intervalArray,title,stringLabels,fretLabels):
+
     fig, ax = plt.subplots()
     ax.imshow(intervalArray,cmap='viridis_r')
 
@@ -17,14 +35,14 @@ def showIntervalArray(intervalArray,stringLabels,fretLabels):
                 label=" "
             else:
                 label=int(intervalArray[i, j])
-            ax.text(j, i, label, ha="center", va="center", color="w")
+            ax.text(j, i, label, ha="center", va="center", color="black")
 
+    plt.title(title)
     ax.set_xticklabels(fretLabels)
     ax.set_yticklabels(stringLabels)
     fig.tight_layout()
     plt.gca().invert_yaxis()
     plt.show()
-
 
 if __name__ == "__main__":
     cfg=Config()
@@ -32,11 +50,8 @@ if __name__ == "__main__":
     root="c"
     scale="aeolian"
 
-
-    stringLabels=app.tuning.copy()
-    fretLabels=[i for i in range(0,app.numFrets)]
-    
     intervalArray=app.makeIntervalArray(scale,root)
-    
-    showIntervalArray(intervalArray,stringLabels,fretLabels)
+    title,stringLabels,fretLabels=makeGraphText(app,root,scale)
+
+    showIntervalArray(intervalArray,title,stringLabels,fretLabels)
 
