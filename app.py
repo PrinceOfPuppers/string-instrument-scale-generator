@@ -1,3 +1,4 @@
+import numpy as np
 def wrappedInterval(interval):
     interval-=1
     interval%=7
@@ -5,7 +6,7 @@ def wrappedInterval(interval):
     return(interval)
 
 class App:
-    def __init__(self):
+    def __init__(self,cfg):
         
         self.spacing=[1,1,0.5,1,1,1,0.5]
         self.diatonic={
@@ -21,7 +22,9 @@ class App:
         self.numToNotes={0:"c" ,0.5: "c#" ,1:"d" ,1.5: "d#" ,2:"e" ,2.5: "f" ,3:"f#" ,3.5: "g" ,4:"g#" ,4.5: "a" ,5:"a#" ,5.5: "b"}
         self.notesToNum={"c":0 ,"c#":0.5 ,"d":1 ,"d#":1.5 ,"e":2 ,"f":2.5 ,"f#":3 ,"g":3.5 ,"g#":4 ,"a":4.5 ,"a#":5 ,"b":5.5}
 
-        self.tuning=["e","a","d","g","b","e"]
+        self.tuning=cfg.tuning
+        self.numFrets=cfg.numFrets
+        self.nonIntervalNum=cfg.nonIntervalNum
     
     def numGivenInterval(self,scale,rootLetter,interval):
         #interval is 1,2,3,4,5,6,7 major/minor/diminished is determined by what scale your in
@@ -54,7 +57,7 @@ class App:
         return(intervalNote)
     
     def intervalGivenNum(self,scale,rootLetter,noteNum):
-        #returns zero if not a scale interval
+        #returns self.nonIntervalNum if not a scale interval
         rootNum=self.notesToNum[rootLetter]
         scaleNum=self.diatonic[scale]
         
@@ -63,13 +66,39 @@ class App:
             if checkingNum==noteNum:
                 break
             else:
-                spacingIndex=(interval+scaleNum)%len(self.spacing)
+                spacingIndex=(interval-1+scaleNum)%len(self.spacing)
                 checkingNum+=self.spacing[spacingIndex]
 
 
-        #if no match is found interval is set to zero
+        #if no match is found interval is set to self.nonIntervalNum
         if interval==8:
-            interval=0
+            interval=self.nonIntervalNum
         return(interval)
+
+    def generateNoteNumArray(self):
+        numStrings=len(self.tuning)
+        noteNumArray=np.ndarray((numStrings,self.numFrets),dtype=float)
+
+        for stringNum in range(0,numStrings):
+            openNote=self.tuning[stringNum]
+            openNoteNum=self.notesToNum[openNote]
+
+            for fretNum in range(0,self.numFrets):
+                noteNumArray[stringNum][fretNum]=(openNoteNum+0.5*fretNum)%6
+        
+        return(noteNumArray)
+
+    def makeIntervalArray(self,scale,rootLetter):
+
+        intervalArray=self.generateNoteNumArray()
+        
+        numStrings=len(self.tuning)
+        for stringNum in range(0,numStrings):
+
+            for fretNum in range(0,self.numFrets):
+                noteNum=intervalArray[stringNum][fretNum]
+                intervalArray[stringNum][fretNum]=self.intervalGivenNum(scale,rootLetter,noteNum)
+        
+        return(intervalArray)
 
 
