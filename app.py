@@ -25,6 +25,7 @@ class App:
         self.tuning=cfg.tuning
         self.numFrets=cfg.numFrets
         self.nonIntervalNum=cfg.nonIntervalNum
+
     
     def numGivenInterval(self,scale,rootLetter,interval):
         #interval is 1,2,3,4,5,6,7 major/minor/diminished is determined by what scale your in
