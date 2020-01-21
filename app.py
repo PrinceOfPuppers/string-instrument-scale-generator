@@ -1,4 +1,5 @@
 import numpy as np
+
 def wrappedInterval(interval):
     interval-=1
     interval%=7
@@ -10,17 +11,27 @@ class App:
         
         self.spacing=[1,1,0.5,1,1,1,0.5]
         self.diatonic={
-            "ionain": 0, 
-            "dorian": 1,
-            "phrygian": 2,
-            "lydian": 3,
-            "mixo-lydian": 4,
-            "aeolian": 5,
-            "locrian": 6
+            "Ionain": 0, 
+            "Dorian": 1,
+            "Phrygian": 2,
+            "Lydian": 3,
+            "Mixo-Lydian": 4,
+            "Aeolian": 5,
+            "Locrian": 6
         }
+        self.diatonicList=[
+            "Ionain",
+            "Dorian",
+            "Phrygian",
+            "Lydian",
+            "Mixo-Lydian",
+            "Aeolian",
+            "Locrian"
+        ]
 
-        self.numToNotes={0:"c" ,0.5: "c#" ,1:"d" ,1.5: "d#" ,2:"e" ,2.5: "f" ,3:"f#" ,3.5: "g" ,4:"g#" ,4.5: "a" ,5:"a#" ,5.5: "b"}
-        self.notesToNum={"c":0 ,"c#":0.5 ,"d":1 ,"d#":1.5 ,"e":2 ,"f":2.5 ,"f#":3 ,"g":3.5 ,"g#":4 ,"a":4.5 ,"a#":5 ,"b":5.5}
+        self.numToNotes={0:"C" ,0.5: "C#" ,1:"D" ,1.5: "D#" ,2:"E" ,2.5: "F" ,3:"F#" ,3.5: "G" ,4:"G#" ,4.5: "A" ,5:"A#" ,5.5: "B"}
+        self.notesToNum={"C":0 ,"C#":0.5 ,"D":1 ,"D#":1.5 ,"E":2 ,"F":2.5 ,"F#":3 ,"G":3.5 ,"G#":4 ,"A":4.5 ,"A#":5 ,"B":5.5}
+        self.noteList=["C" ,"C#" ,"D" ,"D#" ,"E" ,"F" ,"F#" ,"G" ,"G#" ,"A" ,"A#" ,"B"]
 
         self.tuning=cfg.tuning
         self.numFrets=cfg.numFrets
