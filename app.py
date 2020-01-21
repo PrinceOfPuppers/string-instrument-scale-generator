@@ -33,7 +33,6 @@ class App:
         self.notesToNum={"C":0 ,"C#":0.5 ,"D":1 ,"D#":1.5 ,"E":2 ,"F":2.5 ,"F#":3 ,"G":3.5 ,"G#":4 ,"A":4.5 ,"A#":5 ,"B":5.5}
         self.noteList=["C" ,"C#" ,"D" ,"D#" ,"E" ,"F" ,"F#" ,"G" ,"G#" ,"A" ,"A#" ,"B"]
 
-        self.tuning=cfg.tuning
         self.numFrets=cfg.numFrets
         self.nonIntervalNum=cfg.nonIntervalNum
 
@@ -89,12 +88,12 @@ class App:
             interval=self.nonIntervalNum
         return(interval)
 
-    def generateNoteNumArray(self):
-        numStrings=len(self.tuning)
+    def generateNoteNumArray(self,tuning):
+        numStrings=len(tuning)
         noteNumArray=np.ndarray((numStrings,self.numFrets),dtype=float)
 
         for stringNum in range(0,numStrings):
-            openNote=self.tuning[stringNum]
+            openNote=tuning[stringNum]
             openNoteNum=self.notesToNum[openNote]
 
             for fretNum in range(0,self.numFrets):
@@ -102,11 +101,11 @@ class App:
         
         return(noteNumArray)
 
-    def makeIntervalArray(self,scale,rootLetter):
+    def makeIntervalArray(self,tuning,scale,rootLetter):
 
-        intervalArray=self.generateNoteNumArray()
+        intervalArray=self.generateNoteNumArray(tuning)
         
-        numStrings=len(self.tuning)
+        numStrings=len(tuning)
         for stringNum in range(0,numStrings):
 
             for fretNum in range(0,self.numFrets):

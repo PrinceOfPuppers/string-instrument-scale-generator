@@ -1,6 +1,8 @@
 class Config:
     def __init__(self):
-        self.tuning=["E","A","D","G","B","E"]
+        self.defaultTuning="E A D G B E"
+        self.tkinterWinSize="400x150"
+        self.tkinterFont="courrier 13"
         self.numFrets=24
         self.nonIntervalNum=9
         
