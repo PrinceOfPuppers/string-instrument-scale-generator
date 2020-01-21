@@ -1,10 +1,5 @@
 import numpy as np
-
-def wrappedInterval(interval):
-    interval-=1
-    interval%=7
-    interval+=1
-    return(interval)
+from helperFuncs import wrappedInterval
 
 class App:
     def __init__(self,cfg):
@@ -37,7 +32,6 @@ class App:
         self.numFrets=cfg.numFrets+1
         self.nonIntervalNum=cfg.nonIntervalNum
 
-    
     def numGivenInterval(self,scale,rootLetter,interval):
         #interval is 1,2,3,4,5,6,7 major/minor/diminished is determined by what scale your in
         #root is in terms of letter
