@@ -5,7 +5,57 @@ import tkinter as tk
 import numpy as np
 
 def getTuningList(tuningStrVar):
-    return [note.capitalize() for note in tuningStrVar.get().split(" ")]
+    tuningString=tuningStrVar.get().strip()
+    return [note.capitalize() for note in tuningString.split(" ")]
+
+def generateTkinterObjs(app,cfg,tkRoot):
+    tkRoot.geometry(cfg.tkinterWinSize)
+    tkRoot.option_add( "*font", cfg.tkinterFont)
+    window=tk.Frame(tkRoot)
+    window.pack(fill='both',expand=True)
+    window.configure(background= '#404040')
+    
+
+    #root note selection
+    rootLabel=tk.Label(window,text="Root:")
+    rootLabel.configure(background= '#404040',foreground="white",borderwidth=2)
+    root = tk.StringVar(window)
+    root.set(app.noteList[0])
+
+    rootDropDown = tk.OptionMenu(window, root, *app.noteList)
+    rootDropDown.configure(background= '#808080',highlightthickness=0)
+    rootDropDown["menu"].configure(background= '#808080')
+
+
+    #scale selection
+    scaleLabel=tk.Label(window,text="Scale:")
+    scaleLabel.configure(background= '#404040',foreground="white")
+    
+    scale = tk.StringVar(window)
+    scale.set(app.diatonicList[0])
+
+    scaleDropDown = tk.OptionMenu(window, scale, *app.diatonicList)
+    scaleDropDown.configure(background= '#808080',highlightthickness=0)
+    scaleDropDown["menu"].configure(background= '#808080')
+
+    #tuning
+    tuningLabel=tk.Label(window,text="Tuning:")
+    tuningLabel.configure(background= '#404040',foreground="white")
+
+    tuningStrVar=tk.StringVar(window)
+    tuningStrVar.set(cfg.defaultTuning)
+    tuningTextBox=tk.Entry(window,textvariable=tuningStrVar, justify="center")
+    tuningTextBox.configure(background= '#808080',highlightthickness=0)
+
+
+    #generate button
+    generateButton=tk.Button(window,text="Generate",command=lambda: generateAndShow(app,cfg,getTuningList(tuningStrVar),root.get(),scale.get()))
+    generateButton.configure(background= 'red',activebackground='#404040')
+    
+
+    
+
+    return(window,rootLabel,root,rootDropDown,scaleLabel,scale,scaleDropDown,tuningLabel,tuningStrVar,tuningTextBox,generateButton)
 
 def makeGraphText(app,tuning,root,scale):
     note= lambda interval : app.noteGivenInterval(scale,root,interval)
@@ -60,49 +110,8 @@ if __name__ == "__main__":
     app=App(cfg)
 
     tkRoot=tk.Tk()
-    tkRoot.geometry(cfg.tkinterWinSize)
-    tkRoot.option_add( "*font", cfg.tkinterFont )
-    window=tk.Frame(tkRoot)
-    window.pack(fill='both',expand=True)
-    window.configure(background= '#404040' )
-    
 
-    #root note selection
-    rootLabel=tk.Label(window,text="Root:")
-    rootLabel.configure(background= '#404040',foreground="white",borderwidth=2)
-    root = tk.StringVar(window)
-    root.set(app.noteList[0])
-
-    rootDropDown = tk.OptionMenu(window, root, *app.noteList)
-    rootDropDown.configure(background= '#808080',highlightthickness=0)
-    rootDropDown["menu"].configure(background= '#808080')
-
-
-    #scale selection
-    scaleLabel=tk.Label(window,text="Scale:")
-    scaleLabel.configure(background= '#404040',foreground="white")
-    
-    scale = tk.StringVar(window)
-    scale.set(app.diatonicList[0])
-
-    scaleDropDown = tk.OptionMenu(window, scale, *app.diatonicList)
-    scaleDropDown.configure(background= '#808080',highlightthickness=0)
-    scaleDropDown["menu"].configure(background= '#808080')
-
-    #tuning
-    tuningLabel=tk.Label(window,text="Tuning:")
-    tuningLabel.configure(background= '#404040',foreground="white")
-
-    tuningStrVar=tk.StringVar(window)
-    tuningStrVar.set(cfg.defaultTuning)
-    tuningTextBox=tk.Entry(window,textvariable=tuningStrVar)
-    tuningTextBox.configure(background= '#808080',highlightthickness=0)
-
-
-    #generate button
-    generateButton=tk.Button(window,text="Generate",command=lambda: generateAndShow(app,cfg,getTuningList(tuningStrVar),root.get(),scale.get()))
-    generateButton.configure(background= 'red',activebackground='#404040')
-
+    window,rootLabel,root,rootDropDown,scaleLabel,scale,scaleDropDown,tuningLabel,tuningStrVar,tuningTextBox,generateButton=generateTkinterObjs(app,cfg,tkRoot)
 
     #layout organization
     rootLabel.grid(row=0,column=0)
