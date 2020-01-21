@@ -11,20 +11,20 @@ class App:
         
         self.spacing=[1,1,0.5,1,1,1,0.5]
         self.diatonic={
-            "Ionain": 0, 
+            "Ionian": 0, 
             "Dorian": 1,
             "Phrygian": 2,
             "Lydian": 3,
-            "Mixo-Lydian": 4,
+            "Mixolydian": 4,
             "Aeolian": 5,
             "Locrian": 6
         }
         self.diatonicList=[
-            "Ionain",
+            "Ionian",
             "Dorian",
             "Phrygian",
             "Lydian",
-            "Mixo-Lydian",
+            "Mixolydian",
             "Aeolian",
             "Locrian"
         ]
@@ -33,7 +33,8 @@ class App:
         self.notesToNum={"C":0 ,"C#":0.5 ,"D":1 ,"D#":1.5 ,"E":2 ,"F":2.5 ,"F#":3 ,"G":3.5 ,"G#":4 ,"A":4.5 ,"A#":5 ,"B":5.5}
         self.noteList=["C" ,"C#" ,"D" ,"D#" ,"E" ,"F" ,"F#" ,"G" ,"G#" ,"A" ,"A#" ,"B"]
 
-        self.numFrets=cfg.numFrets
+        #interanally, open is considered a fret
+        self.numFrets=cfg.numFrets+1
         self.nonIntervalNum=cfg.nonIntervalNum
 
     

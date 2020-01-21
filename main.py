@@ -57,6 +57,18 @@ def generateTkinterObjs(app,cfg,tkRoot):
 
     return(window,rootLabel,root,rootDropDown,scaleLabel,scale,scaleDropDown,tuningLabel,tuningStrVar,tuningTextBox,generateButton)
 
+def getPlotSize(fretLabels,stringLabels):
+    width=(len(fretLabels)-2)/2.5
+    height=(len(stringLabels))/2.5
+
+    if width<4.5:
+        width=4.5
+
+    if height<1:
+        height=1
+    
+    return(width,height)
+
 def makeGraphText(app,tuning,root,scale):
     note= lambda interval : app.noteGivenInterval(scale,root,interval)
     scaleNotes=[note(interval) for interval in range(1,8)]
@@ -77,15 +89,14 @@ def makeGraphText(app,tuning,root,scale):
 def showIntervalArray(cfg,intervalArray,title,stringLabels,fretLabels):
     if cfg.autoClosePlot:
         plt.close()
-    
-    fig, ax = plt.subplots()
-    fig.patch.set_facecolor('#404040')
 
+    fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels))
+    ax=fig.add_subplot(111)
+    fig.patch.set_facecolor('#404040')
+    
     
     ax.imshow(intervalArray,cmap=cfg.colorMap)
 
-
-    
     ax.set_xticks(np.arange(len(fretLabels)))
     ax.set_yticks(np.arange(len(stringLabels)))
     
@@ -101,7 +112,8 @@ def showIntervalArray(cfg,intervalArray,title,stringLabels,fretLabels):
     
     ax.set_xticklabels(fretLabels,color='white')
     ax.set_yticklabels(stringLabels,color='white')
-    fig.tight_layout()
+    plt.gcf().tight_layout()
+    
     plt.gca().invert_yaxis()
 
     plt.show()
