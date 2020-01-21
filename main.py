@@ -74,10 +74,16 @@ def makeGraphText(app,tuning,root,scale):
 
     return(intervalArrayTitle,stringLabels,fretLabels)
 
-def showIntervalArray(intervalArray,title,stringLabels,fretLabels,colorMap):
-    plt.close()
+def showIntervalArray(cfg,intervalArray,title,stringLabels,fretLabels):
+    if cfg.autoClosePlot:
+        plt.close()
+    
     fig, ax = plt.subplots()
-    ax.imshow(intervalArray,cmap=colorMap)
+    fig.patch.set_facecolor('#404040')
+
+    
+    ax.imshow(intervalArray,cmap=cfg.colorMap)
+
 
     
     ax.set_xticks(np.arange(len(fretLabels)))
@@ -91,9 +97,10 @@ def showIntervalArray(intervalArray,title,stringLabels,fretLabels,colorMap):
                 label=int(intervalArray[i, j])
             ax.text(j, i, label, ha="center", va="center", color="black")
 
-    plt.title(title)
-    ax.set_xticklabels(fretLabels)
-    ax.set_yticklabels(stringLabels)
+    plt.title(title,color='white')
+    
+    ax.set_xticklabels(fretLabels,color='white')
+    ax.set_yticklabels(stringLabels,color='white')
     fig.tight_layout()
     plt.gca().invert_yaxis()
 
@@ -102,7 +109,7 @@ def showIntervalArray(intervalArray,title,stringLabels,fretLabels,colorMap):
 def generateAndShow(app,cfg,tuning,root,scale):
     intervalArray=app.makeIntervalArray(tuning,scale,root)
     title,stringLabels,fretLabels=makeGraphText(app,tuning,root,scale)
-    showIntervalArray(intervalArray,title,stringLabels,fretLabels,cfg.colorMap)
+    showIntervalArray(cfg,intervalArray,title,stringLabels,fretLabels)
 
 
 if __name__ == "__main__":

@@ -8,3 +8,5 @@ class Config:
         
         #self.colorMap="viridis_r"
         self.colorMap="inferno_r"
+
+        self.autoClosePlot=True
