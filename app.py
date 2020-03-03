@@ -107,10 +107,9 @@ class App:
             for fretNum in range(0,self.numFrets):
                 noteNumArray[stringNum][fretNum]=(openNoteNum+0.5*fretNum)%6
         self.intervalArray=noteNumArray
-        return(noteNumArray)
 
     def makeIntervalArray(self):
-        self.intervalArray=self.generateNoteNumArray()
+        self.generateNoteNumArray()
         
         numStrings=len(self.tuning)
         for stringNum in range(0,numStrings):
@@ -118,7 +117,6 @@ class App:
             for fretNum in range(0,self.numFrets):
                 noteNum=self.intervalArray[stringNum][fretNum]
                 self.intervalArray[stringNum][fretNum]=self.intervalGivenNum(self.scale,self.root,noteNum)
-        return(self.intervalArray)
 
     def changeMode(self,newRootInterval):
         #updates array
@@ -132,7 +130,5 @@ class App:
         newRoot=self.noteGivenInterval(self.scale,self.root,newRootInterval)
         newScale=self.diatonicList[(self.diatonic[self.scale]+(newRootInterval-1))%7]
         self.update(newScale,newRoot,self.tuning)
-
-        return(self.intervalArray)
 
         

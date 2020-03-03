@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from helperFuncs import getTuningList,getPlotSize
 
+
 def makeGraphText(app):
     note= lambda interval : app.noteGivenInterval(app.scale,app.root,interval)
     scaleNotes=[note(interval) for interval in range(1,8)]
@@ -20,83 +21,69 @@ def makeGraphText(app):
 
     return(intervalArrayTitle,stringLabels,fretLabels)
 
-def onClick(event,cfg,app,fig,ax):
-    if event.button==1:
-        if cfg.debug:
-            print("click type {}".format(event.button))
-        #coordinates are flipped
-        boxClicked=(int(event.ydata+0.5),int(event.xdata+0.5))
-        try:
+
+def onClick(event,cfg,app,ax):
+    if cfg.debug:
+        print("click type {}".format(event.button))
+
+    if event.button == cfg.mouseButton:
+        #input may be none type
+        if type(event.ydata)!=np.float64 or type(event.xdata)!=np.float64:
+            if cfg.debug:
+                print("clicked offscreen")
+        else:
+            #coordinates are flipped
+            boxClicked=(int(event.ydata+0.5),int(event.xdata+0.5))
+
             newRootInterval=app.intervalArray[boxClicked[0]][boxClicked[1]]
             if newRootInterval!=app.nonIntervalNum:
                 print("Setting {} as new root".format(int(newRootInterval)))
-                intervalArray=app.changeMode(newRootInterval)
+                app.changeMode(newRootInterval)
 
                 newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-                ax.clear()
-                ax.imshow(intervalArray,cmap=cfg.colorMap)
-                for i in range(len(stringLabels)):  
-                    for j in range(len(fretLabels)):
-                        if intervalArray[i, j]==app.nonIntervalNum:
-                            label=" "
-                        else:
-                            label=int(intervalArray[i, j])
-                        ax.text(j ,i , label, ha="center", va="center", color="black")
-                
-                ax.set_xticks(np.arange(len(fretLabels)))
-                ax.set_yticks(np.arange(len(stringLabels)))
-                ax.set_xticklabels(fretLabels,color='white')
-                ax.set_yticklabels(stringLabels,color='white')
-                plt.gca().invert_yaxis()
-                
-                plt.title(newTitle,color="white")
-                plt.show()
-        except:
-            if cfg.debug:
-                print("clicked offscreen")
+                showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
 
 
-
-
-def showIntervalArray(app,cfg,intervalArray,title,stringLabels,fretLabels):
-    if cfg.autoClosePlot:
-        plt.close()
-
-    fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels),num="Click To Change Root")
-    ax=fig.add_subplot(111)
-    fig.patch.set_facecolor('#404040')
-    fig.canvas.mpl_connect('button_press_event', lambda event: onClick(event,cfg,app,fig,ax))
+def showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels):
+    ax.clear()
     
-    
-    ax.imshow(intervalArray,cmap=cfg.colorMap)
-
+    ax.imshow(app.intervalArray,cmap=cfg.colorMap)
     ax.set_xticks(np.arange(len(fretLabels)))
     ax.set_yticks(np.arange(len(stringLabels)))
     
     for i in range(len(stringLabels)):  
         for j in range(len(fretLabels)):
-            if intervalArray[i, j]==app.nonIntervalNum:
+            if app.intervalArray[i, j]==app.nonIntervalNum:
                 label=" "
             else:
-                label=int(intervalArray[i, j])
+                label=int(app.intervalArray[i, j])
             ax.text(j, i, label, ha="center", va="center", color="black")
 
     plt.title(title,color='white')
     
     ax.set_xticklabels(fretLabels,color='white')
     ax.set_yticklabels(stringLabels,color='white')
-    plt.gcf().tight_layout()
     
     plt.gca().invert_yaxis()
 
     plt.show()
 
+
 def generateAndShowPlot(app,cfg,tuning,root,scale):
     app.update(scale,root,tuning)
-    intervalArray=app.makeIntervalArray()
+    app.makeIntervalArray()
     title,stringLabels,fretLabels=makeGraphText(app)
-    showIntervalArray(app,cfg,intervalArray,title,stringLabels,fretLabels)
+
+    
+    plt.close()
+
+    fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels),num="Click To Change Root")
+    ax=fig.add_subplot(111)
+    fig.patch.set_facecolor('#404040')
+    fig.canvas.mpl_connect('button_press_event', lambda event: onClick(event,cfg,app,ax))
+
+    showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels)
 
 
 

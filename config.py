@@ -3,7 +3,7 @@ class Config:
         self.defaultTuning="E A D G B E"
         self.tkinterWinSize="400x150"
         self.tkinterFont="Arial 13"
-        self.debug=True
+        self.debug=False
         #must be atleast 1
         self.numFrets=24
         self.nonIntervalNum=9
@@ -12,3 +12,6 @@ class Config:
         self.colorMap="inferno_r"
 
         self.autoClosePlot=False
+
+        #button for interacting 
+        self.mouseButton=1
