@@ -32,6 +32,19 @@ class App:
         self.numFrets=cfg.numFrets+1
         self.nonIntervalNum=cfg.nonIntervalNum
 
+        #updated in update method
+        self.scale=" "
+        self.root=" "
+        self.tuning=" "
+
+        #updated in generate note num array, generate interval array and change mode methods
+        self.intervalArray=np.array([0])
+
+    def update(self,scale,root,tuning):
+        self.scale=scale
+        self.root=root
+        self.tuning=tuning
+
     def numGivenInterval(self,scale,rootLetter,interval):
         #interval is 1,2,3,4,5,6,7 major/minor/diminished is determined by what scale your in
         #root is in terms of letter
@@ -83,28 +96,43 @@ class App:
             interval=self.nonIntervalNum
         return(interval)
 
-    def generateNoteNumArray(self,tuning):
-        numStrings=len(tuning)
+    def generateNoteNumArray(self):
+        numStrings=len(self.tuning)
         noteNumArray=np.ndarray((numStrings,self.numFrets),dtype=float)
 
         for stringNum in range(0,numStrings):
-            openNote=tuning[stringNum]
+            openNote=self.tuning[stringNum]
             openNoteNum=self.notesToNum[openNote]
 
             for fretNum in range(0,self.numFrets):
                 noteNumArray[stringNum][fretNum]=(openNoteNum+0.5*fretNum)%6
-        
+        self.intervalArray=noteNumArray
         return(noteNumArray)
 
-    def makeIntervalArray(self,tuning,scale,rootLetter):
-
-        intervalArray=self.generateNoteNumArray(tuning)
+    def makeIntervalArray(self):
+        self.intervalArray=self.generateNoteNumArray()
         
-        numStrings=len(tuning)
+        numStrings=len(self.tuning)
         for stringNum in range(0,numStrings):
 
             for fretNum in range(0,self.numFrets):
-                noteNum=intervalArray[stringNum][fretNum]
-                intervalArray[stringNum][fretNum]=self.intervalGivenNum(scale,rootLetter,noteNum)
+                noteNum=self.intervalArray[stringNum][fretNum]
+                self.intervalArray[stringNum][fretNum]=self.intervalGivenNum(self.scale,self.root,noteNum)
+        return(self.intervalArray)
+
+    def changeMode(self,newRootInterval):
+        #updates array
+        for stringNum in range(0,len(self.intervalArray)):
+            for fretNum in range(0,len(self.intervalArray[0])):
+                if self.intervalArray[stringNum][fretNum]!=self.nonIntervalNum:
+                    self.intervalArray[stringNum][fretNum]=(self.intervalArray[stringNum][fretNum]-newRootInterval)%7+1
+
+        #finds new root letter and scale
+        newRootInterval=int(newRootInterval)
+        newRoot=self.noteGivenInterval(self.scale,self.root,newRootInterval)
+        newScale=self.diatonicList[(self.diatonic[self.scale]+(newRootInterval-1))%7]
+        self.update(newScale,newRoot,self.tuning)
+
+        return(self.intervalArray)
+
         
-        return(intervalArray)
