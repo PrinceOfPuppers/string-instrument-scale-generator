@@ -22,34 +22,39 @@ def makeGraphText(app):
 
 def onClick(event,cfg,app,fig,ax):
     if event.button==1:
+        if cfg.debug:
+            print("click type {}".format(event.button))
         #coordinates are flipped
         boxClicked=(int(event.ydata+0.5),int(event.xdata+0.5))
-        newRootInterval=app.intervalArray[boxClicked[0]][boxClicked[1]]
-        if newRootInterval!=app.nonIntervalNum:
-            print("Setting {} as new root".format(int(newRootInterval)))
-            intervalArray=app.changeMode(newRootInterval)
+        try:
+            newRootInterval=app.intervalArray[boxClicked[0]][boxClicked[1]]
+            if newRootInterval!=app.nonIntervalNum:
+                print("Setting {} as new root".format(int(newRootInterval)))
+                intervalArray=app.changeMode(newRootInterval)
 
+                newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-            newTitle,stringLabels,fretLabels=makeGraphText(app)
-
-            ax.clear()
-            ax.imshow(intervalArray,cmap=cfg.colorMap)
-            for i in range(len(stringLabels)):  
-                for j in range(len(fretLabels)):
-                    if intervalArray[i, j]==app.nonIntervalNum:
-                        label=" "
-                    else:
-                        label=int(intervalArray[i, j])
-                    ax.text(j ,i , label, ha="center", va="center", color="black")
-            
-            ax.set_xticks(np.arange(len(fretLabels)))
-            ax.set_yticks(np.arange(len(stringLabels)))
-            ax.set_xticklabels(fretLabels,color='white')
-            ax.set_yticklabels(stringLabels,color='white')
-            plt.gca().invert_yaxis()
-            
-            plt.title(newTitle,color="white")
-            plt.show()
+                ax.clear()
+                ax.imshow(intervalArray,cmap=cfg.colorMap)
+                for i in range(len(stringLabels)):  
+                    for j in range(len(fretLabels)):
+                        if intervalArray[i, j]==app.nonIntervalNum:
+                            label=" "
+                        else:
+                            label=int(intervalArray[i, j])
+                        ax.text(j ,i , label, ha="center", va="center", color="black")
+                
+                ax.set_xticks(np.arange(len(fretLabels)))
+                ax.set_yticks(np.arange(len(stringLabels)))
+                ax.set_xticklabels(fretLabels,color='white')
+                ax.set_yticklabels(stringLabels,color='white')
+                plt.gca().invert_yaxis()
+                
+                plt.title(newTitle,color="white")
+                plt.show()
+        except:
+            if cfg.debug:
+                print("clicked offscreen")
 
 
 
