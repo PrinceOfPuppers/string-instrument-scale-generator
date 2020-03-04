@@ -1,7 +1,10 @@
+import tkinter as tk
 from app import App
 from config import Config
-from gui import Gui,EventHandler,Plotter
-import tkinter as tk
+from gui import Gui
+from plotting import Plotter
+from eventHandling import EventHandler
+
 
 
 if __name__ == "__main__":
