@@ -1,4 +1,5 @@
 import tkinter as tk
+import sys
 from app import App
 from config import Config
 from gui import Gui
@@ -8,6 +9,9 @@ from eventHandling import EventHandler
 
 
 if __name__ == "__main__":
+    #interactivity loop works on recursion
+    sys.setrecursionlimit(10**6)
+
     cfg=Config()
     app=App(cfg)
 
