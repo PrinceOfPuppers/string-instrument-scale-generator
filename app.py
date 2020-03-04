@@ -3,7 +3,6 @@ from helperFuncs import wrappedInterval
 
 class App:
     def __init__(self,cfg):
-        
         self.spacing=[1,1,0.5,1,1,1,0.5]
         self.diatonic={
             "Ionian": 0, 
@@ -23,7 +22,15 @@ class App:
             "Aeolian",
             "Locrian"
         ]
-
+        self.diatonicMajMin={
+            "Ionian": ["1","2","maj3","4","5","maj6","maj7"], 
+            "Dorian": ["1","2","min3","4","5","maj6","min7"],
+            "Phrygian": ["1","min2","min3","4","5","min6","min7"],
+            "Lydian": ["1","2","maj3","aug4","5","maj6","maj7"],
+            "Mixolydian": ["1","2","maj3","4","5","maj6","min7"],
+            "Aeolian": ["1","2","min3","4","5","min6","min7"],
+            "Locrian": ["1","min2","min3","4","dim5","min6","min7"]
+        }
         self.numToNotes={0:"C" ,0.5: "C#" ,1:"D" ,1.5: "D#" ,2:"E" ,2.5: "F" ,3:"F#" ,3.5: "G" ,4:"G#" ,4.5: "A" ,5:"A#" ,5.5: "B"}
         self.notesToNum={"C":0 ,"C#":0.5 ,"D":1 ,"D#":1.5 ,"E":2 ,"F":2.5 ,"F#":3 ,"G":3.5 ,"G#":4 ,"A":4.5 ,"A#":5 ,"B":5.5}
         self.noteList=["C" ,"C#" ,"D" ,"D#" ,"E" ,"F" ,"F#" ,"G" ,"G#" ,"A" ,"A#" ,"B"]
@@ -131,4 +138,8 @@ class App:
         newScale=self.diatonicList[(self.diatonic[self.scale]+(newRootInterval-1))%7]
         self.update(newScale,newRoot,self.tuning)
 
-        
+    #keeps mode but changes key (note intervals of a 5th/4ths will only change one note)
+    def keyChange(self,interval):
+        newRoot=self.noteGivenInterval(self.scale,self.root,interval)
+        self.update(self.scale,newRoot,self.tuning)
+        self.makeIntervalArray()

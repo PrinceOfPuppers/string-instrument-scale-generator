@@ -1,50 +1,42 @@
 import tkinter as tk
 import numpy as np
 import matplotlib.pyplot as plt
-from helperFuncs import getTuningList,getPlotSize
+
+from helperFuncs import getTuningList,getPlotSize,makeLabel,makeGraphText
 
 
-def makeGraphText(app):
-    note= lambda interval : app.noteGivenInterval(app.scale,app.root,interval)
-    scaleNotes=[note(interval) for interval in range(1,8)]
 
-    #capitalizes text and converts lists of notes to strings
-    rootText=app.root
-    scaleNameText=app.scale
-    scaleNoteText=" ".join(tone for tone in scaleNotes)
-    tuningText=" ".join(tone for tone in app.tuning)
-
-    intervalArrayTitle="{} {} ({}) with Tuning {} ".format(rootText,scaleNameText,scaleNoteText,tuningText)
-    
-    stringLabels=[tone.capitalize() for tone in app.tuning]
-    fretLabels=["open"]+[i for i in range(1,app.numFrets)]
-
-    return(intervalArrayTitle,stringLabels,fretLabels)
-
-
-def onClick(event,cfg,app,ax):
+#wrappers for app methods
+def keyUpFifth(cfg,app,ax):
     if cfg.debug:
-        print("click type {}".format(event.button))
+        print("Key Change: Up a Fifth")
+    app.keyChange(5)
 
-    if event.button == cfg.mouseButton:
-        #input may be none type
-        if type(event.ydata)!=np.float64 or type(event.xdata)!=np.float64:
-            if cfg.debug:
-                print("clicked offscreen")
-        else:
-            #coordinates are flipped
-            boxClicked=(int(event.ydata+0.5),int(event.xdata+0.5))
+    newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-            newRootInterval=app.intervalArray[boxClicked[0]][boxClicked[1]]
-            if newRootInterval!=app.nonIntervalNum:
-                print("Setting {} as new root".format(int(newRootInterval)))
-                app.changeMode(newRootInterval)
+    showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
 
-                newTitle,stringLabels,fretLabels=makeGraphText(app)
+def keyDownFourth(cfg,app,ax):
+    if cfg.debug:
+        print("Key Change; Down a Fourth")
+    app.keyChange(4)
 
-                showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
+    newTitle,stringLabels,fretLabels=makeGraphText(app)
 
+    showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
 
+def changeModeToClicked(cfg,app,ax,boxClicked):
+    newRootInterval=app.intervalArray[boxClicked[0]][boxClicked[1]]
+    if newRootInterval!=app.nonIntervalNum:
+        if cfg.debug:
+            print("Setting {} as new root".format(int(newRootInterval)))
+        app.changeMode(newRootInterval)
+
+        newTitle,stringLabels,fretLabels=makeGraphText(app)
+
+        showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
+
+#wrapper for updating plot
 def showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels):
     ax.clear()
     
@@ -54,10 +46,8 @@ def showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels):
     
     for i in range(len(stringLabels)):  
         for j in range(len(fretLabels)):
-            if app.intervalArray[i, j]==app.nonIntervalNum:
-                label=" "
-            else:
-                label=int(app.intervalArray[i, j])
+            interval=int(app.intervalArray[i, j])
+            label=makeLabel(app,cfg,interval)
             ax.text(j, i, label, ha="center", va="center", color="black")
 
     plt.title(title,color='white')
@@ -70,6 +60,8 @@ def showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels):
     plt.show()
 
 
+
+#generates new plot window, used when generate button is hit in tkinter window
 def generateAndShowPlot(app,cfg,tuning,root,scale):
     app.update(scale,root,tuning)
     app.makeIntervalArray()
@@ -78,14 +70,50 @@ def generateAndShowPlot(app,cfg,tuning,root,scale):
     
     plt.close()
 
-    fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels),num="Click To Change Root")
+    fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels),num="Click To Change Root, Scroll To Change Key")
     ax=fig.add_subplot(111)
     fig.patch.set_facecolor('#404040')
-    fig.canvas.mpl_connect('button_press_event', lambda event: onClick(event,cfg,app,ax))
 
+    #bootstraps event handler
+    eventHand=EventHandler()
+    eventHand.enableInteractivity(cfg,app,ax,fig)
+
+    plt.tight_layout()
     showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels)
 
+class EventHandler:
+    def __init__(self):
+        pass
+    
+    def enableInteractivity(self,cfg,app,ax,fig):
+        self.scrolling=fig.canvas.mpl_connect('scroll_event',lambda event: self.onScroll(event,cfg,app,ax,fig))
+        self.clicking=fig.canvas.mpl_connect('button_press_event', lambda event: self.onClick(event,cfg,app,ax,fig))
 
+    def disableInteractivity(self,fig):
+        fig.canvas.mpl_disconnect(self.scrolling)
+        fig.canvas.mpl_disconnect(self.clicking)
+
+    #callback fucntions 
+    def onScroll(self,event,cfg,app,ax,fig):
+        if event.button=="up":
+            keyUpFifth(cfg,app,ax)
+        if event.button=="down":
+            keyDownFourth(cfg,app,ax)
+
+    def onClick(self,event,cfg,app,ax,fig):
+        if cfg.debug:
+            print("clicked on",event.xdata,event.ydata)
+
+        if event.button == cfg.mouseButton:
+            #input may be none type
+            if type(event.ydata)!=np.float64 or type(event.xdata)!=np.float64:
+                if cfg.debug:
+                    print("clicked offscreen")
+            else:
+                #coordinates are flipped
+                boxClicked=(int(event.ydata+0.5),int(event.xdata+0.5))
+
+                changeModeToClicked(cfg,app,ax,boxClicked)
 
 
 class Gui:

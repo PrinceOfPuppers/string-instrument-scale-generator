@@ -11,7 +11,8 @@ class Config:
         #self.colorMap="viridis_r"
         self.colorMap="inferno_r"
 
-        self.autoClosePlot=False
-
         #button for interacting 
         self.mouseButton=1
+
+        self.displayMajMin=True
+

@@ -1,6 +1,6 @@
 from app import App
 from config import Config
-from gui import Gui
+from gui import Gui,EventHandler
 import tkinter as tk
 
 
