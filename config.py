@@ -10,6 +10,7 @@ class Config:
         
         #self.colorMap="viridis_r"
         self.colorMap="inferno_r"
+        self.atlasColorMap="inferno"
 
         #button for interacting 
         self.mouseButton=1

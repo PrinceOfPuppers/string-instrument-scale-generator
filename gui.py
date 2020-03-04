@@ -4,29 +4,26 @@ import matplotlib.pyplot as plt
 
 from helperFuncs import getTuningList,getPlotSize,makeLabel,makeGraphText
 
-
-
-#wrappers for app methods
-def keyUpFifth(cfg,app,ax):
+#wrappers for app methods, used by event handler
+def keyDownFifth(cfg,app,plotter):
     if cfg.debug:
         print("Key Change: Up a Fifth")
     app.keyChange(5)
 
     newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-    showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
+    plotter.plotAndShow(app,cfg,newTitle,stringLabels,fretLabels)
 
-def keyDownFourth(cfg,app,ax):
+def keyUpFourth(cfg,app,plotter):
     if cfg.debug:
         print("Key Change; Down a Fourth")
     app.keyChange(4)
 
     newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-    showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
+    plotter.plotAndShow(app,cfg,newTitle,stringLabels,fretLabels)
 
-def changeModeToClicked(cfg,app,ax,boxClicked):
-    newRootInterval=app.intervalArray[boxClicked[0]][boxClicked[1]]
+def changeMode(cfg,app,plotter,newRootInterval):
     if newRootInterval!=app.nonIntervalNum:
         if cfg.debug:
             print("Setting {} as new root".format(int(newRootInterval)))
@@ -34,73 +31,102 @@ def changeModeToClicked(cfg,app,ax,boxClicked):
 
         newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-        showIntervalArray(app,cfg,ax,newTitle,stringLabels,fretLabels)
+        plotter.plotIntervalArray(app,cfg,newTitle,stringLabels,fretLabels)
+        plotter.plotAndShow(app,cfg,newTitle,stringLabels,fretLabels)
 
-#wrapper for updating plot
-def showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels):
-    ax.clear()
+
+
+
+class Plotter:
+    def __init__(self):
+        pass
+    #generates new plot window, used when generate button is hit in tkinter window
+    def generateNew(self,app,cfg,eventHand,tuning,root,scale):
+        app.update(scale,root,tuning)
+        app.makeIntervalArray()
+        title,stringLabels,fretLabels=makeGraphText(app)
+
+        
+        plt.close()
+
+        self.fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels),num="Click To Change Root, Scroll To Change Key")
+        self.ax=self.fig.add_subplot(111)
+        
+        self.fig.patch.set_facecolor('#404040')
+
+        eventHand.enableInteractivity(cfg,app,self)
+
+        plt.tight_layout()
+        return(title,stringLabels,fretLabels)
     
-    ax.imshow(app.intervalArray,cmap=cfg.colorMap)
-    ax.set_xticks(np.arange(len(fretLabels)))
-    ax.set_yticks(np.arange(len(stringLabels)))
-    
-    for i in range(len(stringLabels)):  
-        for j in range(len(fretLabels)):
-            interval=int(app.intervalArray[i, j])
-            label=makeLabel(app,cfg,interval)
-            ax.text(j, i, label, ha="center", va="center", color="black")
 
-    plt.title(title,color='white')
-    
-    ax.set_xticklabels(fretLabels,color='white')
-    ax.set_yticklabels(stringLabels,color='white')
-    
-    plt.gca().invert_yaxis()
+    #wrapper for updating plots
+    def plotIntervalArray(self,app,cfg,title,stringLabels,fretLabels):
+        self.ax.clear()
+        
+        self.ax.imshow(app.intervalArray,cmap=cfg.colorMap)
+        self.ax.set_xticks(np.arange(len(fretLabels)))
+        self.ax.set_yticks(np.arange(len(stringLabels)))
+        
+        for i in range(len(stringLabels)):  
+            for j in range(len(fretLabels)):
+                interval=int(app.intervalArray[i, j])
+                label=makeLabel(app,cfg,interval)
+                self.ax.text(j, i, label, ha="center", va="center", color="black")
 
-    plt.show()
-
-
-
-#generates new plot window, used when generate button is hit in tkinter window
-def generateAndShowPlot(app,cfg,tuning,root,scale):
-    app.update(scale,root,tuning)
-    app.makeIntervalArray()
-    title,stringLabels,fretLabels=makeGraphText(app)
+        plt.title(title,color='white')
+        
+        self.ax.set_xticklabels(fretLabels,color='white')
+        self.ax.set_yticklabels(stringLabels,color='white')
+        
+        plt.gca().invert_yaxis()
 
     
-    plt.close()
+    def plotAndShow(self,app,cfg,title,stringLabels,fretLabels):
+        self.plotIntervalArray(app,cfg,title,stringLabels,fretLabels)
+        plt.show()
 
-    fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels),num="Click To Change Root, Scroll To Change Key")
-    ax=fig.add_subplot(111)
-    fig.patch.set_facecolor('#404040')
 
-    #bootstraps event handler
-    eventHand=EventHandler()
-    eventHand.enableInteractivity(cfg,app,ax,fig)
 
-    plt.tight_layout()
-    showIntervalArray(app,cfg,ax,title,stringLabels,fretLabels)
+
 
 class EventHandler:
     def __init__(self):
         pass
     
-    def enableInteractivity(self,cfg,app,ax,fig):
-        self.scrolling=fig.canvas.mpl_connect('scroll_event',lambda event: self.onScroll(event,cfg,app,ax,fig))
-        self.clicking=fig.canvas.mpl_connect('button_press_event', lambda event: self.onClick(event,cfg,app,ax,fig))
+    def generateButton(self,app,cfg,plotter,tuning,root,scale):
+        title,stringLabels,fretLabels=plotter.generateNew(app,cfg,self,tuning,root,scale)
+        plotter.plotAndShow(app,cfg,title,stringLabels,fretLabels)
+    
+    def enableInteractivity(self,cfg,app,plotter):
+        self.scrolling=plotter.fig.canvas.mpl_connect('scroll_event',lambda event: self.onScroll(event,cfg,app,plotter))
+        self.clicking=plotter.fig.canvas.mpl_connect('button_press_event', lambda event: self.onClick(event,cfg,app,plotter))
+        self.keys=plotter.fig.canvas.mpl_connect('key_press_event', lambda event: self.onArrowKeys(event,cfg,app,plotter))
 
-    def disableInteractivity(self,fig):
-        fig.canvas.mpl_disconnect(self.scrolling)
-        fig.canvas.mpl_disconnect(self.clicking)
+    def disableInteractivity(self,plotter):
+        plotter.fig.canvas.mpl_disconnect(self.scrolling)
+        plotter.fig.canvas.mpl_disconnect(self.clicking)
+        plotter.fig.canvas.mpl_disconnect(self.keys)
+
+    def onArrowKeys(self,event,cfg,app,plotter):
+        if event.key=="down":
+            keyDownFifth(cfg,app,plotter)
+        elif event.key=="up":
+            keyUpFourth(cfg,app,plotter)
+        elif event.key=="right":
+            changeMode(cfg,app,plotter,2)
+        elif event.key=="left":
+            changeMode(cfg,app,plotter,7)
+
 
     #callback fucntions 
-    def onScroll(self,event,cfg,app,ax,fig):
+    def onScroll(self,event,cfg,app,plotter):
         if event.button=="up":
-            keyUpFifth(cfg,app,ax)
-        if event.button=="down":
-            keyDownFourth(cfg,app,ax)
+            keyDownFifth(cfg,app,plotter)
+        elif event.button=="down":
+            keyUpFourth(cfg,app,plotter)
 
-    def onClick(self,event,cfg,app,ax,fig):
+    def onClick(self,event,cfg,app,plotter):
         if cfg.debug:
             print("clicked on",event.xdata,event.ydata)
 
@@ -112,16 +138,16 @@ class EventHandler:
             else:
                 #coordinates are flipped
                 boxClicked=(int(event.ydata+0.5),int(event.xdata+0.5))
-
-                changeModeToClicked(cfg,app,ax,boxClicked)
+                interval=app.intervalArray[boxClicked[0]][boxClicked[1]]
+                changeMode(cfg,app,plotter,interval)
 
 
 class Gui:
-    def __init__(self,app,cfg,tkRoot):
-        self.generateTkinterObjs(app,cfg,tkRoot)
+    def __init__(self,app,cfg,eventHand,plotter,tkRoot):
+        self.generateTkinterObjs(app,cfg,eventHand,plotter,tkRoot)
         self.makeLayout()
 
-    def generateTkinterObjs(self,app,cfg,tkRoot):
+    def generateTkinterObjs(self,app,cfg,eventHand,plotter,tkRoot):
         tkRoot.geometry(cfg.tkinterWinSize)
         tkRoot.option_add( "*font", cfg.tkinterFont)
         window=tk.Frame(tkRoot)
@@ -162,7 +188,7 @@ class Gui:
 
 
         #generate button
-        generateButton=tk.Button(window,text="Generate",command=lambda: generateAndShowPlot(app,cfg,getTuningList(tuningStrVar),root.get(),scale.get()))
+        generateButton=tk.Button(window,text="Generate",command=lambda: eventHand.generateButton(app,cfg,plotter,getTuningList(tuningStrVar),root.get(),scale.get()))
         generateButton.configure(background= 'red',activebackground='#404040')
 
     

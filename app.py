@@ -47,6 +47,8 @@ class App:
         #updated in generate note num array, generate interval array and change mode methods
         self.intervalArray=np.array([0])
 
+        self.scaleAtlas=np.zeros( ((len(self.diatonic)) ,len(self.noteList)) )
+
     def update(self,scale,root,tuning):
         self.scale=scale
         self.root=root
