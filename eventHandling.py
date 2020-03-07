@@ -62,9 +62,10 @@ class EventHandler:
 
     #callback fucntions 
     def onScroll(self,event,cfg,app,plotter):
-        if event.button=="up":
+
+        if event.button==cfg.down:
             keyDownFifth(cfg,app,plotter)
-        elif event.button=="down":
+        elif event.button==cfg.up:
             keyUpFourth(cfg,app,plotter)
 
     def onClick(self,event,cfg,app,plotter):

@@ -17,3 +17,13 @@ class Config:
 
         self.displayMajMin=True
 
+        
+        self.invertScrolling=False
+
+        self.up="up"
+        self.down="down"
+        if self.invertScrolling:
+            self.up="down"
+            self.down="up"
+
+
