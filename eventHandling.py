@@ -9,7 +9,7 @@ def keyDownFifth(cfg,app,plotter):
 
     newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-    plotter.plotAndShow(app,cfg,newTitle,stringLabels,fretLabels)
+    plotter.plotAndDraw(app,cfg,newTitle,stringLabels,fretLabels)
 
 def keyUpFourth(cfg,app,plotter):
     if cfg.debug:
@@ -18,7 +18,7 @@ def keyUpFourth(cfg,app,plotter):
 
     newTitle,stringLabels,fretLabels=makeGraphText(app)
 
-    plotter.plotAndShow(app,cfg,newTitle,stringLabels,fretLabels)
+    plotter.plotAndDraw(app,cfg,newTitle,stringLabels,fretLabels)
 
 def changeMode(cfg,app,plotter,newRootInterval):
     if newRootInterval!=app.nonIntervalNum:
@@ -29,15 +29,15 @@ def changeMode(cfg,app,plotter,newRootInterval):
         newTitle,stringLabels,fretLabels=makeGraphText(app)
 
         plotter.plotIntervalArray(app,cfg,newTitle,stringLabels,fretLabels)
-        plotter.plotAndShow(app,cfg,newTitle,stringLabels,fretLabels)
+        plotter.plotAndDraw(app,cfg,newTitle,stringLabels,fretLabels)
+
 
 class EventHandler:
     def __init__(self):
         pass
     
     def generateButton(self,app,cfg,plotter,tuning,root,scale):
-        title,stringLabels,fretLabels=plotter.generateNew(app,cfg,self,tuning,root,scale)
-        plotter.plotAndShow(app,cfg,title,stringLabels,fretLabels)
+        plotter.generateNew(app,cfg,self,tuning,root,scale)
     
     def enableInteractivity(self,cfg,app,plotter):
         self.scrolling=plotter.fig.canvas.mpl_connect('scroll_event',lambda event: self.onScroll(event,cfg,app,plotter))

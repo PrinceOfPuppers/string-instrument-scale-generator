@@ -23,13 +23,15 @@ class Plotter:
         eventHand.enableInteractivity(cfg,app,self)
 
         plt.tight_layout()
-        return(title,stringLabels,fretLabels)
+        # note on linux plt.show haults the thread so plotAndDraw must be called before plt.show
+        # event handling is multiplexed through tkinter and matplotlib interactivity
+        self.plotAndDraw(app,cfg,title,stringLabels,fretLabels)
+        plt.show()
     
 
     #wrapper for updating plots
     def plotIntervalArray(self,app,cfg,title,stringLabels,fretLabels):
         self.ax.clear()
-        
         self.ax.imshow(app.intervalArray,cmap=cfg.colorMap)
         self.ax.set_xticks(np.arange(len(fretLabels)))
         self.ax.set_yticks(np.arange(len(stringLabels)))
@@ -48,6 +50,6 @@ class Plotter:
         plt.gca().invert_yaxis()
 
     
-    def plotAndShow(self,app,cfg,title,stringLabels,fretLabels):
+    def plotAndDraw(self,app,cfg,title,stringLabels,fretLabels):
         self.plotIntervalArray(app,cfg,title,stringLabels,fretLabels)
-        plt.show()
+        plt.draw()
