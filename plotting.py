@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
+import config as cfg
 from helperFuncs import makeGraphText,getPlotSize,makeLabel
 
 
@@ -7,7 +9,7 @@ class Plotter:
     def __init__(self):
         pass
     #generates new plot window, used when generate button is hit in tkinter window
-    def generateNew(self,app,cfg,eventHand,tuning,root,scale):
+    def generateNew(self,app,eventHand,tuning,root,scale):
         app.update(scale,root,tuning)
         app.makeIntervalArray()
         title,stringLabels,fretLabels=makeGraphText(app)
@@ -20,17 +22,17 @@ class Plotter:
         
         self.fig.patch.set_facecolor('#404040')
 
-        eventHand.enableInteractivity(cfg,app,self)
+        eventHand.enableInteractivity(app,self)
 
         plt.tight_layout()
         # note on linux plt.show haults the thread so plotAndDraw must be called before plt.show
         # event handling is multiplexed through tkinter and matplotlib interactivity
-        self.plotAndDraw(app,cfg,title,stringLabels,fretLabels)
+        self.plotAndDraw(app,title,stringLabels,fretLabels)
         plt.show()
     
 
     #wrapper for updating plots
-    def plotIntervalArray(self,app,cfg,title,stringLabels,fretLabels):
+    def plotIntervalArray(self,app,title,stringLabels,fretLabels):
         self.ax.clear()
         self.ax.imshow(app.intervalArray,cmap=cfg.colorMap)
         self.ax.set_xticks(np.arange(len(fretLabels)))
@@ -39,7 +41,7 @@ class Plotter:
         for i in range(len(stringLabels)):  
             for j in range(len(fretLabels)):
                 interval=int(app.intervalArray[i, j])
-                label=makeLabel(app,cfg,interval)
+                label=makeLabel(app,interval)
                 self.ax.text(j, i, label, ha="center", va="center", color="black")
 
         plt.title(title,color='white')
@@ -50,6 +52,6 @@ class Plotter:
         plt.gca().invert_yaxis()
 
     
-    def plotAndDraw(self,app,cfg,title,stringLabels,fretLabels):
-        self.plotIntervalArray(app,cfg,title,stringLabels,fretLabels)
+    def plotAndDraw(self,app,title,stringLabels,fretLabels):
+        self.plotIntervalArray(app,title,stringLabels,fretLabels)
         plt.draw()

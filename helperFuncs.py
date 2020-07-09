@@ -1,3 +1,5 @@
+import config as cfg
+
 def getPlotSize(fretLabels,stringLabels):
     width=(len(fretLabels))/2.5 +1
     height=(len(stringLabels))/2.5 +1
@@ -21,7 +23,7 @@ def wrappedInterval(interval):
     return(interval)
 
 #returns labels for the interavals 
-def makeLabel(app,cfg,interval):
+def makeLabel(app,interval):
     if interval==app.nonIntervalNum:
         label=" "
     elif cfg.displayMajMin:

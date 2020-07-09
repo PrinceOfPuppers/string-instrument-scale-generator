@@ -1,8 +1,9 @@
 import numpy as np
+import config as cfg
 from helperFuncs import wrappedInterval
 
 class App:
-    def __init__(self,cfg):
+    def __init__(self):
         self.spacing=[1,1,0.5,1,1,1,0.5]
         self.diatonic={
             "Ionian": 0, 

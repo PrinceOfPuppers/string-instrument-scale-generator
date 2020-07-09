@@ -1,15 +1,15 @@
 import tkinter as tk
 import numpy as np
-
+import config as cfg
 from helperFuncs import getTuningList
 
 
 class Gui:
-    def __init__(self,app,cfg,eventHand,plotter,tkRoot):
-        self.generateTkinterObjs(app,cfg,eventHand,plotter,tkRoot)
+    def __init__(self,app,eventHand,plotter,tkRoot):
+        self.generateTkinterObjs(app,eventHand,plotter,tkRoot)
         self.makeLayout()
 
-    def generateTkinterObjs(self,app,cfg,eventHand,plotter,tkRoot):
+    def generateTkinterObjs(self,app,eventHand,plotter,tkRoot):
         tkRoot.geometry(cfg.tkinterWinSize)
         tkRoot.option_add( "*font", cfg.tkinterFont)
         window=tk.Frame(tkRoot)
@@ -50,7 +50,7 @@ class Gui:
 
 
         #generate button
-        generateButton=tk.Button(window,text="Generate",command=lambda: eventHand.generateButton(app,cfg,plotter,getTuningList(tuningStrVar),root.get(),scale.get()))
+        generateButton=tk.Button(window,text="Generate",command=lambda: eventHand.generateButton(app,plotter,getTuningList(tuningStrVar),root.get(),scale.get()))
         generateButton.configure(background= 'red',activebackground='#404040')
 
     

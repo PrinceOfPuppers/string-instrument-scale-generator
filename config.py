@@ -1,29 +1,24 @@
-class Config:
-    def __init__(self):
-        self.defaultTuning="E A D G B E"
-        self.tkinterWinSize="400x150"
-        self.tkinterFont="Arial 13"
-        self.debug=False
-        #must be atleast 1
-        self.numFrets=24
-        self.nonIntervalNum=9
-        
-        #self.colorMap="viridis_r"
-        self.colorMap="inferno_r"
-        self.atlasColorMap="inferno"
+defaultTuning="E A D G B E"
+tkinterWinSize="400x150"
+tkinterFont="Arial 13"
+debug=False
+#must be atleast 1
+numFrets=24
+nonIntervalNum=9
 
-        #button for interacting 
-        self.mouseButton=1
+#colorMap="viridis_r"
+colorMap="inferno_r"
+atlasColorMap="inferno"
 
-        self.displayMajMin=True
+#button for interacting 
+mouseButton=1
 
-        
-        self.invertScrolling=False
+displayMajMin=True
 
-        self.up="up"
-        self.down="down"
-        if self.invertScrolling:
-            self.up="down"
-            self.down="up"
+
+
+up="up"
+down="down"
+
 
 
