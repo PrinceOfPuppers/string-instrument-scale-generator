@@ -141,8 +141,23 @@ class App:
         newScale=self.diatonicList[(self.diatonic[self.scale]+(newRootInterval-1))%7]
         self.update(newScale,newRoot,self.tuning)
 
-    #keeps mode but changes key (note intervals of a 5th/4ths will only change one note)
-    def keyChange(self,interval):
-        newRoot=self.noteGivenInterval(self.scale,self.root,interval)
+    # key change will change root to any interval but keep the current mode 
+    # (ie if your in lydian and you go up a fourth it will be augmented hence why it is currently unused)
+    #def keyChange(self,interval):
+    #    
+    #    newRoot=self.noteGivenInterval(self.scale,self.root,interval)
+    #    self.update(self.scale,newRoot,self.tuning)
+    #    self.makeIntervalArray()
+    
+
+    def keyDownFifth(self):
+        newRoot = self.numToNotes[(self.notesToNum[self.root]-2.5)%6]
         self.update(self.scale,newRoot,self.tuning)
         self.makeIntervalArray()
+
+    def keyUpForth(self):
+        newRoot = self.numToNotes[(self.notesToNum[self.root]+2.5)%6]
+        self.update(self.scale,newRoot,self.tuning)
+        self.makeIntervalArray()
+
+    
