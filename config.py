@@ -1,7 +1,6 @@
 defaultTuning="E A D G B E"
 tkinterWinSize="400x150"
 tkinterFont="Arial 13"
-debug=False
 #must be atleast 1
 numFrets=24
 nonIntervalNum=9

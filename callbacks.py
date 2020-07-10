@@ -1,12 +1,17 @@
 import numpy as np
 import config as cfg
 from helperFuncs import makeGraphText
+from platform import system
 
 #callbacks
 def onGenerateButton(app,plotter,gui,tuning,root,scale):
-    gui.root.withdraw()
-    plotter.generateNew(app,tuning,root,scale)
-    gui.root.deiconify()
+    if system() == "Linux":
+        gui.root.withdraw()
+        plotter.generateNew(app,tuning,root,scale)
+        gui.root.deiconify()
+    else:
+        plotter.generateNew(app,tuning,root,scale)
+
 
 
 def onArrowKeys(event,app,plotter):
