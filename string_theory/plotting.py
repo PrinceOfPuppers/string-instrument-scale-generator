@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-import config as cfg
-from helperFuncs import makeGraphText,getPlotSize,makeLabel
-from callbacks import onClick,onScroll,onArrowKeys
+import string_theory.config as cfg
+from string_theory.helperFuncs import makeGraphText,getPlotSize,makeLabel
+from string_theory.callbacks import onClick,onScroll,onArrowKeys
 
 class Plotter:
     def __init__(self):

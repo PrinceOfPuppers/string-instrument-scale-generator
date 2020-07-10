@@ -7,7 +7,6 @@ nonIntervalNum=9
 
 #colorMap="viridis_r"
 colorMap="inferno_r"
-atlasColorMap="inferno"
 
 #button for interacting 
 mouseButton=1

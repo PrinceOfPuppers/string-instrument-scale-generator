@@ -1,8 +1,10 @@
 import tkinter as tk
 import numpy as np
-import config as cfg
-from helperFuncs import getTuningList
-from callbacks import onGenerateButton
+
+import string_theory.config as cfg
+from string_theory.helperFuncs import getTuningList
+from string_theory.callbacks import onGenerateButton
+
 
 class Gui:
     def __init__(self,app,plotter):

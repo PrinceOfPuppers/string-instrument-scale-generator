@@ -1,4 +1,4 @@
-import config as cfg
+import string_theory.config as cfg
 
 def getPlotSize(fretLabels,stringLabels):
     width=(len(fretLabels))/2.5 +1

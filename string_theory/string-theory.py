@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
+
 import tkinter as tk
 import sys
-from app import App
 
-from gui import Gui
-from plotting import Plotter
+from string_theory.app import App
+from string_theory.gui import Gui
+from string_theory.plotting import Plotter
+
 
 
 

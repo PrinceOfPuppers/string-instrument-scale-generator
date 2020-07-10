@@ -1,8 +1,8 @@
 import numpy as np
-import config as cfg
-from helperFuncs import makeGraphText
 from platform import system
 
+import string_theory.config as cfg
+from string_theory.helperFuncs import makeGraphText
 #callbacks
 def onGenerateButton(app,plotter,gui,tuning,root,scale):
     if system() == "Linux":
@@ -15,13 +15,13 @@ def onGenerateButton(app,plotter,gui,tuning,root,scale):
 
 
 def onArrowKeys(event,app,plotter):
-    if event.key=="down":
+    if event.key == "down":
         app.keyDownFifth()
-    elif event.key=="up":
+    elif event.key == "up":
         app.keyUpForth()
-    elif event.key=="right":
+    elif event.key == "right":
         app.changeMode(2)
-    elif event.key=="left":
+    elif event.key == "left":
         app.changeMode(7)
     else:
         return
@@ -31,9 +31,9 @@ def onArrowKeys(event,app,plotter):
 
 #callback fucntions 
 def onScroll(event,app,plotter):
-    if event.button=="down":
+    if event.button == "down":
         app.keyDownFifth()
-    elif event.button=="up":
+    elif event.button == "up":
         app.keyUpForth()
     else:
         return

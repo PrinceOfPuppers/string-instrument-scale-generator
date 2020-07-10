@@ -1,6 +1,7 @@
 import numpy as np
-import config as cfg
-from helperFuncs import wrappedInterval
+
+import string_theory.config as cfg
+from string_theory.helperFuncs import wrappedInterval
 
 class App:
     def __init__(self):
