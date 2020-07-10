@@ -2,17 +2,18 @@ import tkinter as tk
 import numpy as np
 import config as cfg
 from helperFuncs import getTuningList
-
+from callbacks import onGenerateButton
 
 class Gui:
-    def __init__(self,app,eventHand,plotter,tkRoot):
-        self.generateTkinterObjs(app,eventHand,plotter,tkRoot)
+    def __init__(self,app,plotter):
+        self.root=tk.Tk()
+        self.generateTkinterObjs(app,plotter)
         self.makeLayout()
 
-    def generateTkinterObjs(self,app,eventHand,plotter,tkRoot):
-        tkRoot.geometry(cfg.tkinterWinSize)
-        tkRoot.option_add( "*font", cfg.tkinterFont)
-        window=tk.Frame(tkRoot)
+    def generateTkinterObjs(self,app,plotter):
+        self.root.geometry(cfg.tkinterWinSize)
+        self.root.option_add( "*font", cfg.tkinterFont)
+        window=tk.Frame(self.root)
         window.pack(fill='both',expand=True)
         window.configure(background= '#404040')
 
@@ -50,7 +51,7 @@ class Gui:
 
 
         #generate button
-        generateButton=tk.Button(window,text="Generate",command=lambda: eventHand.generateButton(app,plotter,getTuningList(tuningStrVar),root.get(),scale.get()))
+        generateButton=tk.Button(window,text="Generate",command=lambda: onGenerateButton(app,plotter,self,getTuningList(tuningStrVar),root.get(),scale.get()))
         generateButton.configure(background= 'red',activebackground='#404040')
 
     
@@ -81,5 +82,5 @@ class Gui:
                 self.window.columnconfigure(column, weight=1)
                 self.window.rowconfigure(row,weight=1)
     
-    def mainLoop(self,tkRoot):
-        tkRoot.mainloop()
+    def mainLoop(self,):
+        self.root.mainloop()

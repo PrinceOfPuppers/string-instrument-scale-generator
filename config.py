@@ -14,11 +14,3 @@ atlasColorMap="inferno"
 mouseButton=1
 
 displayMajMin=True
-
-
-
-up="up"
-down="down"
-
-
-

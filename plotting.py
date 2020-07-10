@@ -3,18 +3,18 @@ import matplotlib.pyplot as plt
 
 import config as cfg
 from helperFuncs import makeGraphText,getPlotSize,makeLabel
-
+from callbacks import onClick,onScroll,onArrowKeys
 
 class Plotter:
     def __init__(self):
         pass
+    
     #generates new plot window, used when generate button is hit in tkinter window
-    def generateNew(self,app,eventHand,tuning,root,scale):
+    def generateNew(self,app,tuning,root,scale):
         app.update(scale,root,tuning)
         app.makeIntervalArray()
         title,stringLabels,fretLabels=makeGraphText(app)
 
-        
         plt.close()
 
         self.fig=plt.figure(figsize=getPlotSize(fretLabels,stringLabels),num="Click To Change Root, Scroll To Change Key")
@@ -22,7 +22,7 @@ class Plotter:
         
         self.fig.patch.set_facecolor('#404040')
 
-        eventHand.enableInteractivity(app,self)
+        self.enableInteractivity(app)
 
         plt.tight_layout()
         # note on linux plt.show haults the thread so plotAndDraw must be called before plt.show
@@ -30,6 +30,10 @@ class Plotter:
         self.plotAndDraw(app,title,stringLabels,fretLabels)
         plt.show()
     
+    def enableInteractivity(self,app):
+        self.fig.canvas.mpl_connect('scroll_event',lambda event: onScroll(event,app,self))
+        self.fig.canvas.mpl_connect('button_press_event', lambda event: onClick(event,app,self))
+        self.fig.canvas.mpl_connect('key_press_event', lambda event: onArrowKeys(event,app,self))
 
     #wrapper for updating plots
     def plotIntervalArray(self,app,title,stringLabels,fretLabels):

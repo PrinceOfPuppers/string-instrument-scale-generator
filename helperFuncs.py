@@ -43,7 +43,7 @@ def makeGraphText(app):
     scaleNoteText=" ".join(tone for tone in scaleNotes)
     tuningText=" ".join(tone for tone in app.tuning)
 
-    intervalArrayTitle="{} {} ({}) with Tuning {} ".format(rootText,scaleNameText,scaleNoteText,tuningText)
+    intervalArrayTitle=f"{rootText} {scaleNameText} ({scaleNoteText}) with Tuning {tuningText} "
     
     stringLabels=[tone.capitalize() for tone in app.tuning]
     fretLabels=["open"]+[i for i in range(1,app.numFrets)]
