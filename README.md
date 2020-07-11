@@ -1,3 +1,5 @@
+<img src="https://drive.google.com/uc?id=1JAetZyGNzIss8I324dHTHcnc9SkXFloT" />  
+
 # string-theory
 
 > A tool for generating maps of scales on any non-microtonal string instrument
@@ -19,8 +21,9 @@ to uninstall...
 ```pip3 uninstall string-theory```
 
 ## Usage
-Once installed using pip, launch using
-```string-theory.py```
+Once installed using pip the following command can be exacuted from any working directory  
+```string-theory.py```  
+the .py extension is required for windows compatibility  
 
 Change root note and mode using the drop down menus, to change tuning type your tuning into the tuning box
 with each note seperated by spaces. If you need sharps or flats in your tuning you must use sharps
