@@ -3,14 +3,14 @@
 > A tool for generating maps of scales on any non-microtonal string instrument
 
 ## Setup
-With the parent file as your current working directory, run
+With the parent file as your current working directory, run  
 ```pip3 install .```
 
-to uninstall
+to uninstall  
 ```pip3 uninstall string-theory```
 
 ## Usage
-Once installed using pip, launch using
+Once installed using pip, launch using  
 ```string-theory.py```
 
 Change root note and mode using the drop down menus, to change tuning type your tuning into the tuning box
