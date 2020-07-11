@@ -22,12 +22,12 @@ with each note seperated by spaces, if you need sharps or flats in your tuning y
 
 Press the generate button to make the map
 
-### Controls
-<ins>Mode Shifting:</ins>
-    - Click on any note to make it the new root
-    - Use left and right arrows to shift the root down to the 7th or up to the 2nd
+## Controls
+<ins>Mode Shifting:</ins>  
+    - Click on any note to make it the new root  
+    - Use left and right arrows to shift the root down to the 7th or up to the 2nd  
 
 
-<ins>Key Chaning:</ins>
-    - scroll up or down to go up a 4th or down a 5th in key respectivly 
-    - Use up or down arrow keys for the same purpose as scrolling
+<ins>Key Chaning:</ins>  
+    - scroll up or down to go up a 4th or down a 5th in key respectivly  
+    - Use up or down arrow keys for the same purpose as scrolling  
