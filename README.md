@@ -15,19 +15,19 @@ Once installed using pip, launch using
 Change root note and mode using the drop down menus, to change tuning type your tuning into the tuning box
 with each note seperated by spaces, if you need sharps or flats in your tuning you must use sharps
 
-__Examples:__
-    e a d g
-    E A D G B E
-    D# F# A# g B
+<ins>Examples:</ins>  
+>e a d g  
+>E A D G B E  
+>D# F# A# g B  
 
 Press the generate button to make the map
 
 ### Controls
-__Mode Shifting:__
+<ins>Mode Shifting:</ins>
     - Click on any note to make it the new root
     - Use left and right arrows to shift the root down to the 7th or up to the 2nd
 
 
-__Key Chaning:__
+<ins>Key Chaning:</ins>
     - scroll up or down to go up a 4th or down a 5th in key respectivly 
     - Use up or down arrow keys for the same purpose as scrolling
