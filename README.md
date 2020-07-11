@@ -3,18 +3,27 @@
 > A tool for generating maps of scales on any non-microtonal string instrument
 
 ## Setup
-With the parent file as your current working directory, run  
+<ins>Install tkinter:</ins>  
+Windows:  
+&emsp;Tkinter comes preinstalled
+
+Linux:  
+&emsp;On arch install tk  
+&emsp;For all other distros install python3-tkinter  
+
+<ins>Install Package With PIP:</ins>  
+With the parent file as your current working directory, run...  
 ```pip3 install .```
 
-to uninstall  
+to uninstall...  
 ```pip3 uninstall string-theory```
 
 ## Usage
-Once installed using pip, launch using  
+Once installed using pip, launch using
 ```string-theory.py```
 
 Change root note and mode using the drop down menus, to change tuning type your tuning into the tuning box
-with each note seperated by spaces, if you need sharps or flats in your tuning you must use sharps
+with each note seperated by spaces. If you need sharps or flats in your tuning you must use sharps
 
 <ins>Examples:</ins>  
 >e a d g  
