@@ -1,4 +1,4 @@
-<img src="https://drive.google.com/uc?id=1JAetZyGNzIss8I324dHTHcnc9SkXFloT" />  
+<img src="banner.png" />  
 
 # string-theory
 
